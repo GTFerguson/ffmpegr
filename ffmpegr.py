@@ -274,7 +274,7 @@ def test_dpegr(video_path):
 
     batch_size = 16
 
-    dpegr = FfmDPegr(
+    dpegr = FFmDPegr(
         video_path,
         start_frame=0,
         end_frame=10,
