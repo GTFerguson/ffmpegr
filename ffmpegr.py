@@ -158,6 +158,25 @@ class FFmDPegr:
                 print("FFmDPegged process stopped.")
 
 
+    def get_frame(self):
+        """
+            Read a batch of frames from the FFmpeg process.
+            
+            Returns:
+                A NumPy array of shape (batch_size, height, width, 3) if successful,
+                or None if no frames could be read.
+        """
+        if self.decoder_process is None:
+            raise Exception("FFmpeg process not started. Call start() first.")
+
+        frame_size = self.width * self.height * 3  # assuming 3 channels for rgb24
+        raw_frame = self.decoder_process.stdout.read(frame_size)
+        if len(raw_frame) != frame_size:
+            return  # End of stream
+
+        return np.frombuffer(raw_frame, dtype=np.uint8).reshape((self.height, self.width, 3))
+
+
     def get_batch(self):
         """
             Read a batch of frames from the FFmpeg process.
